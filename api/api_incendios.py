@@ -70,6 +70,23 @@ def departamentos():
         return [f["departamen"] for f in cur.fetchall()]
 
 
+@app.get("/departamentos/incendios")
+def incendios_por_departamento():
+    with cursor() as cur:
+        cur.execute("SELECT departamento, focos_totales, focos_calibracion, focos_validacion, susc_media FROM res.departamentos_incendios ORDER BY focos_totales DESC")
+        return cur.fetchall()
+
+
+@app.get("/departamento/{departamento}/incendios")
+def incendios_departamento(departamento: str):
+    with cursor() as cur:
+        cur.execute("SELECT departamento, focos_totales, focos_calibracion, focos_validacion, susc_media FROM res.departamentos_incendios WHERE departamento = %s", (departamento.upper(),))
+        fila = cur.fetchone()
+    if not fila:
+        raise HTTPException(404, "Departamento no encontrado")
+    return fila
+
+
 @app.get("/distrito/{ubigeo}")
 def distrito(ubigeo: str):
     with cursor() as cur:
