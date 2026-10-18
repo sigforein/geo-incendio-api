@@ -121,3 +121,74 @@ def ranking(departamento: str, n: int = Query(10, ge=1, le=50), min_celdas: int 
             (departamento.upper(), min_celdas, n),
         )
         return [preparar(f) for f in cur.fetchall()]
+
+
+
+ZN = {4: "Muy alta", 3: "Alta", 2: "Media", 1: "Baja"}
+PER = {"total": "sismos_total", "cal": "sismos_cal", "val": "sismos_val"}
+SJ = "FROM res.distritos_susceptibilidad d JOIN res.distritos_sismos s ON s.ubigeo = d.ubigeo"
+SC = """d.ubigeo, d.departamen AS departamento, d.provincia, d.distrito,
+        s.zona_sismica AS zona, s.pga_e030::float AS pga, s.peligro_sismico::float AS peligro,
+        s.sismos_cal, s.sismos_val, s.sismos_total"""
+
+
+@app.get("/sismos/punto")
+def sismos_punto(lon: float = Query(..., ge=-82, le=-68), lat: float = Query(..., ge=-19, le=1)):
+    with cursor() as cur:
+        cur.execute(
+            f"SELECT {SC} {SJ} WHERE ST_Contains(d.geom, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) LIMIT 1",
+            (lon, lat),
+        )
+        fila = cur.fetchone()
+    if not fila:
+        raise HTTPException(404, "El punto no cae dentro de un distrito")
+    fila["zona_nombre"] = ZN.get(fila["zona"])
+    return fila
+
+
+@app.get("/sismos/resumen")
+def sismos_resumen():
+    with cursor() as cur:
+        cur.execute(
+            """SELECT zona_sismica AS zona, COUNT(*) AS distritos,
+                      SUM(sismos_total)::int AS sismos_total, SUM(sismos_val)::int AS sismos_val,
+                      ROUND(AVG(sismos_val)::numeric, 3)::float AS media_val
+               FROM res.distritos_sismos GROUP BY 1 ORDER BY 1 DESC"""
+        )
+        return cur.fetchall()
+
+
+@app.get("/sismos/departamento/{departamento}")
+def sismos_departamento(departamento: str):
+    with cursor() as cur:
+        cur.execute(
+            f"""SELECT d.departamen AS departamento, COUNT(*) AS distritos,
+                       SUM(s.sismos_total)::int AS sismos_total, SUM(s.sismos_cal)::int AS sismos_cal,
+                       SUM(s.sismos_val)::int AS sismos_val,
+                       COUNT(*) FILTER (WHERE s.sismos_val > 0) AS distritos_con_sismo,
+                       COUNT(*) FILTER (WHERE s.zona_sismica = 4) AS z4,
+                       COUNT(*) FILTER (WHERE s.zona_sismica = 3) AS z3,
+                       COUNT(*) FILTER (WHERE s.zona_sismica = 2) AS z2,
+                       COUNT(*) FILTER (WHERE s.zona_sismica = 1) AS z1
+                {SJ} WHERE d.departamen = %s GROUP BY d.departamen""",
+            (departamento.upper(),),
+        )
+        fila = cur.fetchone()
+    if not fila:
+        raise HTTPException(404, "Departamento no encontrado")
+    return fila
+
+
+@app.get("/sismos/ranking")
+def sismos_ranking(departamento: str, periodo: str = "total", n: int = Query(10, ge=1, le=50)):
+    col = PER.get(periodo)
+    if not col:
+        raise HTTPException(400, "periodo debe ser total, cal o val")
+    with cursor() as cur:
+        cur.execute(
+            f"""SELECT d.distrito, d.provincia, s.zona_sismica AS zona, s.{col} AS n
+                {SJ} WHERE d.departamen = %s AND s.{col} > 0
+                ORDER BY s.{col} DESC, d.distrito LIMIT %s""",
+            (departamento.upper(), n),
+        )
+        return cur.fetchall()
