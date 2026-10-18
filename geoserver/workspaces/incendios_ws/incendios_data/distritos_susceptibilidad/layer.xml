@@ -1,0 +1,16 @@
+<layer>
+  <name>distritos_susceptibilidad</name>
+  <id>LayerInfoImpl-3a15a92d:1a14d4c32cb:-7ffc</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--570ae188:124761b8d78:-7fe0</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-3a15a92d:1a14d4c32cb:-7ffd</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2026-10-18 04:40:40.695 UTC</dateCreated>
+</layer>

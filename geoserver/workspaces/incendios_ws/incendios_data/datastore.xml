@@ -1,0 +1,44 @@
+<dataStore>
+  <id>DataStoreInfoImpl-3a15a92d:1a14d4c32cb:-7ffe</id>
+  <name>incendios_data</name>
+  <type>PostGIS</type>
+  <enabled>true</enabled>
+  <workspace>
+    <id>WorkspaceInfoImpl-3a15a92d:1a14d4c32cb:-8000</id>
+  </workspace>
+  <connectionParameters class="linked-hash-map">
+    <entry key="dbtype">postgis</entry>
+    <entry key="host">pg-9598702-atomicmail-1cee.j.aivencloud.com</entry>
+    <entry key="port">24294</entry>
+    <entry key="database">defaultdb</entry>
+    <entry key="schema">res</entry>
+    <entry key="user">avnadmin</entry>
+    <entry key="passwd">AVNS_jNYMsg38XU09GnD8MjS</entry>
+    <entry key="namespace">http://incendios.local</entry>
+    <entry key="Expose primary keys">false</entry>
+    <entry key="max connections">10</entry>
+    <entry key="min connections">1</entry>
+    <entry key="fetch size">1000</entry>
+    <entry key="Batch insert size">1</entry>
+    <entry key="Connection timeout">20</entry>
+    <entry key="validate connections">true</entry>
+    <entry key="Test while idle">true</entry>
+    <entry key="Evictor run periodicity">300</entry>
+    <entry key="Max connection idle time">300</entry>
+    <entry key="Evictor tests per run">3</entry>
+    <entry key="Loose bbox">true</entry>
+    <entry key="Estimated extends">true</entry>
+    <entry key="SSL mode">REQUIRE</entry>
+    <entry key="preparedStatements">false</entry>
+    <entry key="Max open prepared statements">50</entry>
+    <entry key="encode functions">true</entry>
+    <entry key="Support on the fly geometry simplification">true</entry>
+    <entry key="Method used to simplify geometries">FAST</entry>
+    <entry key="create database">false</entry>
+    <entry key="reWriteBatchedInserts">false</entry>
+  </connectionParameters>
+  <__default>false</__default>
+  <dateCreated>2026-10-18 04:38:09.462 UTC</dateCreated>
+  <dateModified>2026-10-18 04:39:55.276 UTC</dateModified>
+  <disableOnConnFailure>false</disableOnConnFailure>
+</dataStore>

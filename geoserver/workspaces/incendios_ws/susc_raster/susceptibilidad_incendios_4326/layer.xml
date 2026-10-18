@@ -1,0 +1,17 @@
+<layer>
+  <name>susceptibilidad_incendios_4326</name>
+  <id>LayerInfoImpl-3a15a92d:1a14d4c32cb:-7ff9</id>
+  <type>RASTER</type>
+  <defaultStyle>
+    <id>StyleInfoImpl-3a15a92d:1a14d4c32cb:-7ff8</id>
+  </defaultStyle>
+  <resource class="coverage">
+    <id>CoverageInfoImpl-3a15a92d:1a14d4c32cb:-7ffa</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2026-10-18 04:45:12.284 UTC</dateCreated>
+  <dateModified>2026-10-18 04:50:47.999 UTC</dateModified>
+</layer>
